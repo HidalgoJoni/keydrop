@@ -1,9 +1,9 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const Skin = require('../../backend/src/models/Skin');
-const Case = require('../../backend/src/models/Case');
-const User = require('../../backend/src/models/User');
+const Skin = require('../../src/models/Skin');
+const Case = require('../../src/models/Case');
+const User = require('../../src/models/User');
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/cs2-box-clone';
 
