@@ -1,45 +1,47 @@
 @import '../styles/variables';
 
-.main-header {
-  display: flex;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: $surface-color;
-  border-bottom: 1px solid $surface-color-light;
+.app-header {
+  background: #0b1221;
+  color: #fff;
+  padding: 12px 0;
 
-  .header-logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: $primary-color;
-    margin-right: 2rem;
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
   }
 
-  .header-nav {
+  .logo {
+    font-size: 18px;
+  }
+
+  .header-right {
     display: flex;
-    gap: 1.5rem;
-    a {
-      color: $text-color;
-      font-weight: 600;
-      transition: color 0.2s;
-      &.active, &:hover {
-        color: $primary-color;
-      }
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn {
+    background: #1f6feb;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+
+    &.ghost {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
   }
 
-  .header-user {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .user-balance {
-    background-color: $background-color;
-    padding: 0.5rem 1rem;
-    border-radius: $border-radius;
-    font-weight: bold;
-    color: $primary-color;
+  .balance {
+    background: #111827;
+    padding: 6px 10px;
+    border-radius: 6px;
   }
 }
 

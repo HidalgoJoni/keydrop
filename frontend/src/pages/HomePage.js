@@ -1,38 +1,61 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import CaseCard from '../components/CaseCard';
+import OpeningModal from '../components/OpeningModal';
 import './HomePage.scss';
 
 const HomePage = () => {
     const [cases, setCases] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedCase, setSelectedCase] = useState(null);
 
+    // Cargar las cajas desde la API al montar el componente
     useEffect(() => {
+        let mounted = true;
         const fetchCases = async () => {
             try {
-                const { data } = await api.get('/cases');
-                setCases(data);
+                const res = await api.get('/cases');
+                // soportar distintas estructuras de respuesta
+                const data = res.data && (res.data.cases || res.data);
+                if (mounted) setCases(Array.isArray(data) ? data : []);
             } catch (err) {
-                setError('No se pudieron cargar las cajas.');
-            } finally {
-                setLoading(false);
+                console.error('Error fetching cases:', err);
             }
         };
         fetchCases();
+        return () => { mounted = false; };
     }, []);
 
-    if (loading) return <p>Cargando cajas...</p>;
-    if (error) return <p>{error}</p>;
+    const handleOpenModal = (caseData) => {
+        setSelectedCase(caseData);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        // Limpiar la caja seleccionada para evitar reutilizar datos obsoletos
+        setSelectedCase(null);
+    };
 
     return (
         <div className="home-page">
             <h1 className="page-title">Cajas Disponibles</h1>
             <div className="cases-grid">
                 {cases.map(caseData => (
-                    <CaseCard key={caseData._id} caseData={caseData} />
+                    <CaseCard 
+                        key={caseData._id} 
+                        caseData={caseData} 
+                        onOpen={handleOpenModal} // Pasamos la función al componente hijo
+                    />
                 ))}
             </div>
+            {selectedCase && (
+                <OpeningModal 
+                    caseData={selectedCase}
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                />
+            )}
         </div>
     );
 };

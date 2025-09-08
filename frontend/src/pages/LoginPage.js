@@ -1,58 +1,47 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import './LoginPage.scss';
 
-const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
+const LoginPage = ({ onSuccess }) => {
+  const { saveAuth } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [isRegister, setIsRegister] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        try {
-            await login(email, password);
-            navigate('/');
-        } catch (err) {
-            setError('Email o contraseña incorrectos. Por favor, inténtalo de nuevo.');
-            console.error(err);
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (isRegister) {
+        const res = await api.post('/auth/register', { username, email, password });
+        saveAuth(res.data.token, res.data.user);
+      } else {
+        const res = await api.post('/auth/login', { email, password });
+        saveAuth(res.data.token, res.data.user);
+      }
+      onSuccess && onSuccess();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error');
+    }
+  };
 
-    return (
-        <div className="login-page">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit} className="login-form">
-                <div className="form-group">
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="form-input"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Contraseña</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="form-input"
-                        required
-                    />
-                </div>
-                <button type="submit" className="submit-btn">
-                    Entrar
-                </button>
-                {error && <p className="login-form__error">{error}</p>}
-            </form>
-        </div>
-    );
+  return (
+    <div className="auth-page">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <h2>{isRegister ? 'Register' : 'Login'}</h2>
+        {isRegister && (
+          <input placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
+        )}
+        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        <button type="submit" className="btn">{isRegister ? 'Register' : 'Login'}</button>
+        <button type="button" className="btn ghost" onClick={() => setIsRegister(!isRegister)}>
+          {isRegister ? 'Switch to Login' : 'Switch to Register'}
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default LoginPage;

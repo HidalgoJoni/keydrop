@@ -1,0 +1,137 @@
+@import '../styles/variables';
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: $surface-color;
+  border-radius: $border-radius;
+  width: 90%;
+  max-width: 800px;
+  overflow: hidden;
+}
+
+.spinner-container {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  background: repeating-linear-gradient(45deg, $background-color, $background-color 10px, darken($background-color, 3%) 10px, darken($background-color, 3%) 20px);
+
+  .spinner-ticker {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background-color: $primary-color;
+    z-index: 2;
+    box-shadow: 0 0 10px $primary-color;
+  }
+
+  .spinner-track {
+    display: flex;
+    height: 100%;
+    position: absolute;
+    left: 50%; /* Centramos el inicio de la tira */
+    margin-left: -50px; /* Ajustamos por la mitad del ancho de un item */
+    transition: transform 7s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .spinner-item {
+    width: 100px;
+    height: 100px;
+    margin: 25px 5px;
+    background-color: $surface-color-light;
+    border-radius: $border-radius;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    
+    img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+  }
+}
+
+.result-container {
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+
+  .result-rarity-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+  }
+
+  .result-title {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .result-image {
+    max-height: 200px;
+    margin: 1rem 0;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+  }
+
+  .result-name {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .result-weapon {
+    font-size: 1.2rem;
+    color: lighten($text-color, -20%);
+    margin-bottom: 2rem;
+  }
+
+  .result-close-btn {
+    padding: 0.75rem 2rem;
+    border: none;
+    background-color: $primary-color;
+    color: $text-color-dark;
+    font-weight: bold;
+    border-radius: $border-radius;
+    cursor: pointer;
+  }
+}
+
+/* --- ESTILOS DE RAREZA ESCRITOS MANUALMENTE --- */
+
+.result-container.rarity--consumer .result-rarity-bar { background-color: #b0c3d9; }
+.result-container.rarity--consumer .result-name { color: #b0c3d9; }
+
+.result-container.rarity--industrial .result-rarity-bar { background-color: #5e98d9; }
+.result-container.rarity--industrial .result-name { color: #5e98d9; }
+
+.result-container.rarity--mil-spec .result-rarity-bar { background-color: #4b69ff; }
+.result-container.rarity--mil-spec .result-name { color: #4b69ff; }
+
+.result-container.rarity--restricted .result-rarity-bar { background-color: #8847ff; }
+.result-container.rarity--restricted .result-name { color: #8847ff; }
+
+.result-container.rarity--classified .result-rarity-bar { background-color: #d32ce6; }
+.result-container.rarity--classified .result-name { color: #d32ce6; }
+
+.result-container.rarity--covert .result-rarity-bar { background-color: #eb4b4b; }
+.result-container.rarity--covert .result-name { color: #eb4b4b; }
+
+.result-container.rarity--knife-gloves .result-rarity-bar { background-color: #ffd700; }
+.result-container.rarity--knife-gloves .result-name { color: #ffd700; }

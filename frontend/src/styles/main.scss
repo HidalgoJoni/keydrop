@@ -1,2 +1,14 @@
-@import './variables';
-@import './base';
+@import './_variables.scss';
+@import './_base.scss';
+
+@import '../components/Header.scss';
+@import '../pages/HomePage.scss';
+@import '../pages/LoginPage.scss';
+@import '../components/CaseCard.scss';
+@import '../components/OpeningModal.scss';
+@import '../pages/BattlesPage.scss';
+@import '../pages/InventoryPage.scss';
+@import '../pages/ProfilePage.scss';
+@import '../pages/LeaderboardPage.scss';
+
+body { margin:0; }

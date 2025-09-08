@@ -33,3 +33,26 @@ exports.sellSkin = async (req, res) => {
     await user.save();
     res.json({ newBalance: user.balance, soldSkinId: inventoryItemId });
 };
+
+exports.me = async (req, res) => {
+  try {
+    const userId = req.userId;
+    if (!userId) return res.status(401).json({ message: 'Not authenticated' });
+    const user = await User.findById(userId).populate('inventory.skinId');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    // remove sensitive fields
+    const safeUser = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      balance: user.balance,
+      inventory: user.inventory,
+      history: user.history,
+      createdAt: user.createdAt
+    };
+    res.json({ user: safeUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

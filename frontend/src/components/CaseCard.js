@@ -1,28 +1,34 @@
-import React from 'react';
+// src/components/CaseCard.js (Actualizado)
+import React, { useContext } from 'react';
 import './CaseCard.scss';
+import api from '../services/api';
+import { AuthContext } from '../context/AuthContext';
 
-const CaseCard = ({ caseData }) => {
-    
-    const handleOpenCase = () => {
-        console.log("Abriendo caja:", caseData._id);
-        // Aquí iría la lógica para abrir la caja,
-        // probablemente llamando a una función del contexto
-        // que muestre un modal con la animación de la ruleta.
-    };
+const CaseCard = ({ caseData, onOpen }) => {
+  const { updateBalance } = useContext(AuthContext);
 
-    return (
-        <div className="case-card">
-            <div className="case-card__image-container">
-                <img src={caseData.imageUrl} alt={caseData.name} className="case-card__image" />
-            </div>
-            <div className="case-card__info">
-                <h3 className="case-card__name">{caseData.name}</h3>
-                <button onClick={handleOpenCase} className="case-card__button">
-                    ${caseData.price.toFixed(2)}
-                </button>
-            </div>
-        </div>
-    );
+  const handleOpen = async () => {
+    if (onOpen) return onOpen(caseData);
+
+    // fallback behaviour: try to open via API
+    try {
+      const res = await api.post('/cases/open', { caseId: caseData._id });
+      alert('Won ' + res.data.wonSkin.name);
+      if (res.data.newBalance && updateBalance) updateBalance(res.data.newBalance);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error opening case');
+    }
+  };
+
+  return (
+    <div className="case-card">
+      <h3 className="case-card__name">{caseData.name}</h3>
+      <div className="case-card__button">
+        ${caseData.price.toFixed(2)}
+      </div>
+      <button className="btn" onClick={handleOpen}>Open</button>
+    </div>
+  );
 };
 
 export default CaseCard;

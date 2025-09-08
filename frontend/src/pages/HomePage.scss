@@ -1,8 +1,11 @@
 .home-page {
-  padding: 2rem;
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 0 16px;
+
   .page-title {
     font-size: 2rem;
-    margin-bottom: 2rem;
+    margin: 0 0 8px 0;
     text-align: center;
   }
 }
@@ -10,5 +13,6 @@
 .cases-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
+  gap: 12px;
+  margin-top: 16px;
 }

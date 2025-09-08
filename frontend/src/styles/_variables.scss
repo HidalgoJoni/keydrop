@@ -1,11 +1,28 @@
-$primary-color: #facc15;
-$background-color: #1a202c;
-$surface-color: #2d3748;
-$surface-color-light: #4a5568;
-$text-color: #e2e8f0;
-$text-color-dark: #1a202c;
-$error-color: #e53e3e;
-$success-color: #38a169;
+// Base colors
+$primary: #1f6feb;
+$secondary: #7c3aed;
+$success: #10b981;
+$danger: #ef4444;
+$warning: #f59e0b;
+$info: #3b82f6;
 
-$font-family: 'Poppins', sans-serif;
+// Text colors
+$text-primary: #111827;
+$text-secondary: #4b5563;
+$text-muted: #6b7280;
+
+// Background colors
+$bg-body: #f3f4f6;
+$bg-card: #ffffff;
+$bg-dark: #111827;
+
+// Layout
+$container-max: 1200px;
+$spacing-unit: 8px;
 $border-radius: 8px;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;

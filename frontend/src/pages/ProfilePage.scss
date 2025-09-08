@@ -1,0 +1,15 @@
+// src/pages/ProfilePage.scss
+.profile-page {
+  padding: 20px;
+
+  .history-list {
+    margin-top: 20px;
+
+    .history-item {
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+    }
+  }
+}

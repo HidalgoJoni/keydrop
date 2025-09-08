@@ -1,53 +1,66 @@
-import React, { useState, useEffect, useContext } from 'react';
-import api from '../services/api';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import SkinCard from '../components/SkinCard'; // Tendrás que crear este componente
+import api from '../services/api';
 import './InventoryPage.scss';
 
 const InventoryPage = () => {
-    const [inventory, setInventory] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const { user, updateBalance } = useContext(AuthContext);
+  const { user, updateBalance } = useContext(AuthContext);
+  const [inventory, setInventory] = useState([]);
+  const [priceByIndex, setPriceByIndex] = useState({});
 
-    useEffect(() => {
-        if (user) {
-            api.get('/users/inventory')
-                .then(response => {
-                    setInventory(response.data);
-                })
-                .finally(() => setLoading(false));
-        }
-    }, [user]);
-
-    const handleSellSkin = async (inventoryItemId) => {
-        try {
-            const { data } = await api.post('/users/inventory/sell', { inventoryItemId });
-            // Actualizar el saldo en el contexto global
-            updateBalance(data.newBalance);
-            // Filtrar el inventario para quitar la skin vendida
-            setInventory(prev => prev.filter(item => item._id !== inventoryItemId));
-        } catch (error) {
-            console.error("Error al vender la skin", error);
-        }
+  useEffect(() => {
+    const fetchInventory = async () => {
+      if (!user) return;
+      const res = await api.get('/users/me').catch(()=>null);
+      setInventory(res?.data?.user?.inventory || user.inventory || []);
     };
-    
-    if (loading) return <p>Cargando inventario...</p>;
+    fetchInventory();
+  }, [user]);
 
-    return (
-        <div className="inventory-page">
-            <h1 className="page-title">Mi Inventario ({inventory.length} items)</h1>
-            <div className="skins-grid">
-                {inventory.length > 0 ? (
-                    inventory.map(item => (
-                        // Pasa la función para venderla al componente SkinCard
-                        <SkinCard key={item._id} item={item} onSell={handleSellSkin} />
-                    ))
-                ) : (
-                    <p>No tienes skins en tu inventario.</p>
-                )}
+  const handleUpgrade = async (index) => {
+    try {
+      const res = await api.post('/skins/upgrade', { inventoryIndex: index });
+      alert(res.data.success ? 'Upgrade success' : 'Upgrade failed');
+      if (res.data.newBalance) updateBalance(res.data.newBalance);
+      // refresh inventory
+      const refreshed = await api.get('/users/me');
+      setInventory(refreshed.data.user.inventory || []);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error');
+    }
+  };
+
+  const handleSell = async (index) => {
+    try {
+      const item = inventory[index];
+      const price = priceByIndex[index] || Math.max(1, Math.round((item.skinId?.value || 1) * 0.5));
+      const res = await api.post('/market/sell', { skinId: item.skinId._id, price });
+      alert('Listed for sale');
+      const refreshed = await api.get('/users/me');
+      setInventory(refreshed.data.user.inventory || []);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error listing skin');
+    }
+  };
+
+  return (
+    <div className="inventory-page container">
+      <h2>Inventory</h2>
+      <div className="inventory-grid">
+        {inventory.map((it, i) => (
+          <div className="inventory-item" key={i}>
+            <div>{it.skinId?.name || 'Unknown'}</div>
+            <div>Value: {it.skinId?.value || 'N/A'}</div>
+            <div>
+              <input type="number" placeholder="price" value={priceByIndex[i] || ''} onChange={e => setPriceByIndex(prev => ({ ...prev, [i]: e.target.value }))} />
+              <button className="btn" onClick={() => handleUpgrade(i)}>Upgrade</button>
+              <button className="btn" onClick={() => handleSell(i)}>Sell</button>
             </div>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default InventoryPage;

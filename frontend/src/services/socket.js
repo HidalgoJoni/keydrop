@@ -1,23 +1,16 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:5000'; // La URL de tu servidor backend
+const URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace('/api','') : 'http://localhost:5000';
+let socket = null;
 
-// Función para inicializar y obtener el socket
-const getSocket = () => {
-    const token = localStorage.getItem('token');
+export function connectSocket(token) {
+  if (!socket) {
+    const auth = token ? { auth: { token } } : { };
+    socket = io(URL, { transports: ['websocket'], ...auth });
+  }
+  return socket;
+}
 
-    // Creamos la instancia del socket
-    const socket = io(URL, {
-        // Opción clave: enviamos el token en el handshake de conexión
-        // para que el middleware `protectSocket` del backend pueda verificarlo.
-        auth: {
-            token: token 
-        },
-        // Conectamos manualmente para tener más control
-        autoConnect: false 
-    });
-
-    return socket;
-};
-
-export default getSocket;
+export function getSocket() {
+  return socket;
+}

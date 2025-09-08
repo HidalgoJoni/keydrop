@@ -4,56 +4,55 @@ import api from '../services/api';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-    // Este efecto se ejecuta solo una vez cuando la aplicación carga
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            // Si encontramos un token, intentamos obtener el perfil del usuario
-            api.get('/auth/profile')
-                .then(response => {
-                    // Si el token es válido, guardamos los datos del usuario
-                    setUser(response.data);
-                })
-                .catch(() => {
-                    // Si el token es inválido (ej. ha expirado), lo eliminamos
-                    localStorage.removeItem('token');
-                })
-                .finally(() => {
-                    // Terminamos de cargar, independientemente del resultado
-                    setLoading(false);
-                });
-        } else {
-            setLoading(false);
-        }
-    }, []);
+  useEffect(() => {
+    const saved = localStorage.getItem('auth');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setToken(parsed.token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${parsed.token}`;
+      // fetch full user
+      api.get('/users/me').then(res => {
+        setUser(res.data.user);
+      }).catch(()=>{
+        setUser(parsed.user);
+      });
+    }
+  }, []);
 
-    const login = async (email, password) => {
-        const response = await api.post('/auth/login', { email, password });
-        const { token, ...userData } = response.data;
-        
-        // Guardamos el token en el almacenamiento local para persistir la sesión
-        localStorage.setItem('token', token);
-        // Actualizamos el estado con los datos del usuario
-        setUser(userData);
-    };
+  const saveAuth = (token, user) => {
+    setToken(token);
+    setUser(user);
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    // fetch full user profile
+    api.get('/users/me').then(res => {
+      setUser(res.data.user);
+      localStorage.setItem('auth', JSON.stringify({ token, user: res.data.user }));
+    }).catch(()=>{
+      localStorage.setItem('auth', JSON.stringify({ token, user }));
+    });
+  };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setUser(null);
-    };
-    
-    // Función para que otros componentes puedan actualizar el saldo del usuario
-    const updateBalance = (newBalance) => {
-        setUser(currentUser => ({ ...currentUser, balance: newBalance }));
-    };
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    delete api.defaults.headers.common['Authorization'];
+    localStorage.removeItem('auth');
+  };
 
-    return (
-        <AuthContext.Provider value={{ user, login, logout, updateBalance, loading }}>
-            {/* No mostramos la app hasta que se verifique si hay un usuario logueado */}
-            {!loading && children}
-        </AuthContext.Provider>
-    );
+  const updateBalance = (newBalance) => {
+    if (!user) return;
+    const updated = { ...user, balance: newBalance };
+    setUser(updated);
+    const saved = JSON.parse(localStorage.getItem('auth') || '{}');
+    localStorage.setItem('auth', JSON.stringify({ token: saved.token || token, user: updated }));
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, token, saveAuth, logout, updateBalance }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

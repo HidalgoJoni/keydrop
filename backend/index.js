@@ -1,48 +1,45 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const http = require('http');
-const { Server } = require('socket.io');
 const cors = require('cors');
 const connectDB = require('./src/config/db');
-const { protectSocket } = require('./src/middleware/authMiddleware'); // Middleware para sockets
-
-// Conectar a la Base de Datos
-connectDB();
+const rateLimit = require('express-rate-limit');
+const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
-
-// Middlewares de Express
-app.use(cors()); // Permite peticiones desde otros dominios (tu frontend)
-app.use(express.json()); // Permite al servidor aceptar y parsear JSON
-
-// Rutas de la API
-app.use('/api/auth', require('./src/routes/authRoutes'));
-app.use('/api/users', require('./src/routes/userRoutes'));
-app.use('/api/cases', require('./src/routes/caseRoutes'));
-app.use('/api/upgrades', require('./src/routes/upgradeRoutes'));
-
-// Configuración del servidor y Socket.IO
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: 'http://localhost:3000', // URL de tu frontend en desarrollo
-    methods: ['GET', 'POST'],
-  },
-});
+const { setupBattleSocket } = require('./src/sockets/battleSocket');
 
-// Middleware de autenticación para Socket.IO
-io.use(protectSocket);
+// middleware
+app.use(cors());
+app.use(express.json());
 
-// Manejador de eventos de Socket.IO
-const battleHandler = require('./src/sockets/battleHandler');
-io.on('connection', (socket) => {
-  console.log(`🔌 Usuario conectado a sockets: ${socket.user.username} (${socket.id})`);
-  battleHandler(io, socket);
+// basic rate limiter
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200 });
+app.use(limiter);
 
-  socket.on('disconnect', () => {
-    console.log(`🔌 Usuario desconectado: ${socket.id}`);
-  });
-});
+// connect db
+connectDB();
+
+// routes
+app.use('/api/auth', require('./src/routes/auth'));
+app.use('/api/cases', require('./src/routes/cases'));
+app.use('/api/skins', require('./src/routes/skins'));
+app.use('/api/market', require('./src/routes/market'));
+app.use('/api/transactions', require('./src/routes/transactions'));
+app.use('/api/battles', require('./src/routes/battles'));
+app.use('/api/users', require('./src/routes/userRoutes'));
+app.use('/api/leaderboard', require('./src/routes/leaderboard'));
+
+// static or simple root
+app.get('/', (req, res) => res.send({ ok: true, service: 'cs2-box-clone backend' }));
+
+// sockets
+setupBattleSocket(server);
+
+// global error handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

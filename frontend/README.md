@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Frontend (React + SCSS)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This frontend uses React and SCSS for styling. Tailwind has been removed; styles live under `src/styles` and components use individual SCSS files.
 
 ## Available Scripts
 
@@ -68,3 +68,21 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Development
+
+1. Install deps:
+
+   ```bash
+   npm install
+   ```
+
+2. Run:
+
+   ```bash
+   npm start
+   ```
+
+## Notes
+
+- If you previously had Tailwind, it's been removed. Use SCSS files in `src/styles` and component SCSS files.
