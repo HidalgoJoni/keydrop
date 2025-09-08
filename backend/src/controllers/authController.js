@@ -1,12 +1,6 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
-
-// Función para generar el token
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d', // El token expirará en 30 días
-    });
-};
+const generateToken = require('../utils/generateToken');
 
 // @desc    Registrar un nuevo usuario
 // @route   POST /api/auth/register
