@@ -1,4 +1,4 @@
-const mongoose =require('mongoose');
+const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
     user: { 
@@ -9,18 +9,15 @@ const transactionSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['buyCase', 'sellSkin', 'upgradeWin', 'upgradeLoss', 'battleWin', 'marketSale', 'marketPurchase', 'manualCredit']
+        enum: ['buyCase', 'sellSkin', 'upgradeWin', 'upgradeLoss', 'battleWin', 'manualCredit']
     },
-    // Almacena datos relevantes, como el ID del skin o la caja
     details: { 
         type: mongoose.Schema.Types.Mixed 
     },
-    // Puede ser positivo (ganancia) o negativo (gasto)
     amount: { 
         type: Number, 
         required: true 
     },
-    // El saldo del usuario después de la transacción
     balanceAfter: { 
         type: Number, 
         required: true 

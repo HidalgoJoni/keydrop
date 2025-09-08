@@ -16,7 +16,6 @@ const caseSchema = new mongoose.Schema({
     },
     possibleSkins: [{
         skin: { type: mongoose.Schema.Types.ObjectId, ref: 'Skin' },
-        // La probabilidad de obtener este skin (ej: 0.8 para 80%)
         dropChance: { type: Number, required: true }
     }]
 });

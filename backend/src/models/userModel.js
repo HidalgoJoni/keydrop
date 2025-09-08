@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
         required: true, 
         unique: true, 
         trim: true,
-        index: true // Indexar para búsquedas rápidas
+        index: true
     },
     email: { 
         type: String, 
@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
         type: Number, 
         default: 1000.0 
     },
-    // Referencia a una instancia única de un skin, no solo al tipo de skin
     inventory: [{
         skin: { type: mongoose.Schema.Types.ObjectId, ref: 'Skin' },
         obtainedAt: { type: Date, default: Date.now }
@@ -35,12 +34,10 @@ const userSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-// Método para comparar contraseñas durante el login
 userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.passwordHash);
 };
 
-// Middleware para encriptar la contraseña antes de guardarla
 userSchema.pre('save', async function(next) {
     if (!this.isModified('passwordHash')) {
         return next();

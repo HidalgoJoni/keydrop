@@ -19,9 +19,8 @@ const battleSchema = new mongoose.Schema({
     },
     winner: { 
         type: mongoose.Schema.Types.ObjectId, 
-        refPath: 'participants.user' // Puede ser un usuario
+        refPath: 'participants.user'
     },
-    // Opcional: un ID único para unirse a la batalla
     joinCode: { 
         type: String, 
         unique: true, 

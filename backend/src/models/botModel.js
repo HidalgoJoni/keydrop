@@ -10,7 +10,6 @@ const botSchema = new mongoose.Schema({
         type: String, 
         default: 'default_bot_avatar.jpg' 
     },
-    // Define cómo se comporta un bot, por ejemplo, qué cajas prefiere
     behaviorProfile: {
         type: String,
         enum: ['agresivo', 'conservador', 'aleatorio'],

@@ -22,7 +22,7 @@ const skinSchema = new mongoose.Schema({
             'Contraband', 
             'Knife/Gloves'
         ],
-        index: true // Indexar para filtrar por rareza
+        index: true
     },
     imageUrl: { 
         type: String, 
