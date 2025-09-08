@@ -1,4 +1,4 @@
-@import '../styles/variables';
+@import '../styles/_variables.scss';
 
 .app-header {
   background: #0b1221;
@@ -45,7 +45,6 @@
   }
 }
 
-// Estilos de botones genéricos que puedes mover a un _buttons.scss
 .btn {
   padding: 0.5rem 1rem;
   border: none;
@@ -55,18 +54,18 @@
   transition: all 0.2s;
 
   &--primary {
-    background-color: $primary-color;
-    color: $text-color-dark;
+    background-color: $primary;
+    color: $bg-dark;
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background-color: darken($primary, 10%);
     }
   }
 
   &--secondary {
-    background-color: $surface-color-light;
-    color: $text-color;
+    background-color: $text-secondary;
+    color: $info;
     &:hover {
-      background-color: lighten($surface-color-light, 10%);
+      background-color: lighten($text-secondary, 10%);
     }
   }
 }

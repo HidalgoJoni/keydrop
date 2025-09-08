@@ -1,6 +1,6 @@
-const User = require('../models/userModel');
-const Skin = require('../models/skinModel');
-const Transaction = require('../models/transactionModel');
+const User = require('../models/User');
+const Skin = require('../models/Skin');
+const Transaction = require('../models/Transaction');
 
 exports.getInventory = async (req, res) => {
     const user = await User.findById(req.user.id).populate('inventory.skin');

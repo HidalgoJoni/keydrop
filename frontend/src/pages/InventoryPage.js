@@ -22,7 +22,6 @@ const InventoryPage = () => {
       const res = await api.post('/skins/upgrade', { inventoryIndex: index });
       alert(res.data.success ? 'Upgrade success' : 'Upgrade failed');
       if (res.data.newBalance) updateBalance(res.data.newBalance);
-      // refresh inventory
       const refreshed = await api.get('/users/me');
       setInventory(refreshed.data.user.inventory || []);
     } catch (err) {

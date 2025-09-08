@@ -2,7 +2,7 @@
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const Battle = require('../models/Battle');
-const CaseModel = require('../models/Case');
+const Case = require('../models/Case');
 const Skin = require('../models/Skin');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
@@ -100,7 +100,7 @@ function setupBattleSocket(server) {
 
         io.to(battleId).emit('battle-started', { participants: battle.participants });
 
-        const pop = await CaseModel.findById(battle.caseId._id).populate('possibleSkins.skinId');
+        const pop = await Case.findById(battle.caseId._id).populate('possibleSkins.skinId');
         const results = [];
 
         for (let p of battle.participants) {

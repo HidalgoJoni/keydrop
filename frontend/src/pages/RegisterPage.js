@@ -4,36 +4,28 @@ import { AuthContext } from '../context/AuthContext';
 import './RegisterPage.scss';
 
 const RegisterPage = () => {
-    // Estados para cada campo del formulario y para los mensajes de error
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    // Obtenemos la función 'register' de nuestro contexto global
     const { register } = useContext(AuthContext);
     
-    // Hook para navegar a otras rutas después del registro
     const navigate = useNavigate();
 
-    // Función que se ejecuta al enviar el formulario
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevenimos el comportamiento por defecto del formulario
-        setError(''); // Limpiamos errores anteriores
-
-        // Validación simple del lado del cliente
+        e.preventDefault(); 
+        setError(''); 
+        
         if (password.length < 6) {
             setError('La contraseña debe tener al menos 6 caracteres.');
             return;
         }
 
         try {
-            // Llamamos a la función register del AuthContext
             await register(username, email, password);
-            // Si el registro es exitoso, redirigimos a la página principal
             navigate('/');
         } catch (err) {
-            // Si hay un error (ej. usuario ya existe), lo mostramos
             setError('No se pudo crear la cuenta. El email o usuario ya podría existir.');
             console.error("Error en el registro:", err);
         }

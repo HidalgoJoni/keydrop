@@ -1,4 +1,3 @@
-// src/pages/ProfilePage.js
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';

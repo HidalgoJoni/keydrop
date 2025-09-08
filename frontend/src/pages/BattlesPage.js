@@ -1,4 +1,3 @@
-// src/pages/BattlesPage.js
 import React, { useEffect, useState, useContext } from 'react';
 import api from '../services/api';
 import { connectSocket, getSocket } from '../services/socket';

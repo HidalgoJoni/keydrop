@@ -27,7 +27,6 @@ const OpeningModal = ({ caseData, isOpen, onClose, battleId, isBattle }) => {
         } else if (!isBattle) {
             startOpening();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen, caseData, battleId, isBattle]);
 
     const startBattleListen = (battleId) => {
@@ -52,7 +51,6 @@ const OpeningModal = ({ caseData, isOpen, onClose, battleId, isBattle }) => {
             const { results, winner, winnerSkin } = payload;
             setIsSpinning(false);
             setWonSkin(winnerSkin || null);
-            // refresh user if needed
             if (user && String(winner.userId) === String(user.id)) {
                 api.get('/users/me').then(res => updateBalance(res.data.user.balance)).catch(()=>{});
             }

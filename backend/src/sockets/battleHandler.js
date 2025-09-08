@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const Battle = require('../models/battleModel');
-const Case = require('../models/caseModel');
-const User = require('../models/userModel');
-const Bot = require('../models/botModel');
-const Transaction = require('../models/transactionModel');
+const Case = require('../models/Case');
+const User = require('../models/User');
+const Bot = require('../models/Bot');
+const Transaction = require('../models/Transaction');
 const { getWinningSkin } = require('../services/caseService');
 
 // Objeto en memoria para gestionar el estado de las batallas en curso

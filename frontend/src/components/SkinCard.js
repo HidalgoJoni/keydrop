@@ -2,10 +2,8 @@ import React from 'react';
 import './SkinCard.scss';
 
 const SkinCard = ({ item, onSell }) => {
-    // El 'item' que viene del inventario es { _id, skin: { ... } }
     const { skin } = item;
     
-    // Convertimos la rareza a un formato usable como clase CSS
     const rarityClass = skin.rarity.toLowerCase().replace(/ /g, '-').replace('/', '');
 
     return (

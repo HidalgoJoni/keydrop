@@ -10,7 +10,6 @@ const CaseCard = ({ caseData, onOpen }) => {
   const handleOpen = async () => {
     if (onOpen) return onOpen(caseData);
 
-    // fallback behaviour: try to open via API
     try {
       const res = await api.post('/cases/open', { caseId: caseData._id });
       alert('Won ' + res.data.wonSkin.name);

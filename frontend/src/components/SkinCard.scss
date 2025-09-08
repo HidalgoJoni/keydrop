@@ -1,6 +1,3 @@
-@import '../styles/variables';
-
-// Mapa de colores para cada rareza de skin
 $rarity-colors: (
   'consumer': #b0c3d9,
   'industrial': #5e98d9,
@@ -24,7 +21,6 @@ $rarity-colors: (
     width: 100%;
   }
 
-  // Generamos clases dinámicamente para cada color de rareza
   @each $rarity, $color in $rarity-colors {
     &.rarity--#{$rarity} .skin-card__rarity-bar {
       background-color: $color;

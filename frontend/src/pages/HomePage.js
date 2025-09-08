@@ -9,13 +9,11 @@ const HomePage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCase, setSelectedCase] = useState(null);
 
-    // Cargar las cajas desde la API al montar el componente
-    useEffect(() => {
+     useEffect(() => {
         let mounted = true;
         const fetchCases = async () => {
             try {
                 const res = await api.get('/cases');
-                // soportar distintas estructuras de respuesta
                 const data = res.data && (res.data.cases || res.data);
                 if (mounted) setCases(Array.isArray(data) ? data : []);
             } catch (err) {
@@ -33,7 +31,6 @@ const HomePage = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        // Limpiar la caja seleccionada para evitar reutilizar datos obsoletos
         setSelectedCase(null);
     };
 
@@ -45,8 +42,8 @@ const HomePage = () => {
                     <CaseCard 
                         key={caseData._id} 
                         caseData={caseData} 
-                        onOpen={handleOpenModal} // Pasamos la función al componente hijo
-                    />
+                        onOpen={handleOpenModal} 
+                        />
                 ))}
             </div>
             {selectedCase && (

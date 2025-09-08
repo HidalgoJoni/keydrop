@@ -1,7 +1,6 @@
-@import '../styles/variables';
-
+@import '../styles/_variables.scss';
 .case-card {
-  background-color: $surface-color;
+  background-color: $bg-body;
   border-radius: $border-radius;
   overflow: hidden;
   text-align: center;
@@ -14,7 +13,7 @@
   }
 
   &__image-container {
-    background-color: darken($surface-color, 5%);
+    background-color: darken($bg-body, 5%);
     padding: 1.5rem;
     display: flex;
     justify-content: center;
@@ -46,15 +45,15 @@
     padding: 0.75rem;
     border: none;
     border-radius: $border-radius;
-    background-color: $primary-color;
-    color: $text-color-dark;
+    background-color: $bg-body;
+    color: $bg-dark;
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background-color: darken($bg-body, 10%);
     }
   }
 

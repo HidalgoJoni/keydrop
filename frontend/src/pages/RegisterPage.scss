@@ -1,14 +1,13 @@
-@import '../styles/variables';
-
+@import '../styles/_variables.scss';
 .register-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 0; // Añadimos padding para que no se pegue en pantallas pequeñas
-
+  padding: 2rem 0; 
+  
   .register-form {
-    background-color: $surface-color;
-    padding: 2.5rem; // Un poco más de padding
+    background-color: $bg-body;
+    padding: 2.5rem; 
     border-radius: $border-radius;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     width: 100%;
@@ -22,9 +21,9 @@
     }
 
     &__error {
-      background-color: lighten($error-color, 10%);
+      background-color: lighten($danger, 10%);
       color: white;
-      border-left: 4px solid $error-color;
+      border-left: 4px solid $danger;
       padding: 0.75rem;
       border-radius: 4px;
       margin-bottom: 1rem;
@@ -35,21 +34,20 @@
       text-align: center;
       margin-top: 1.5rem;
       font-size: 0.9rem;
-      color: lighten($text-color, -20%);
+      color: lighten($text-primary, -20%);
 
       a {
-        color: $primary-color;
+        color: $primary;
         font-weight: 600;
         text-decoration: underline;
 
         &:hover {
-          color: darken($primary-color, 10%);
+          color: darken($primary, 10%);
         }
       }
     }
   }
 
-  // Estilos de formulario (puedes moverlos a un archivo _forms.scss para reutilizar)
   .form-group {
     margin-bottom: 1.25rem;
 
@@ -64,8 +62,8 @@
     width: 100%;
     padding: 0.75rem;
     border-radius: 4px;
-    background-color: $background-color;
-    border: 1px solid $surface-color-light;
+    background-color: $bg-body;
+    border: 1px solid $bg-body;
     color: $text-color;
     font-size: 1rem;
     transition: border-color 0.2s;
@@ -78,8 +76,8 @@
 
   .submit-btn {
     width: 100%;
-    background-color: $primary-color;
-    color: $text-color-dark;
+    background-color: $primary;
+    color: $bg-dark;
     font-weight: bold;
     padding: 0.85rem 1rem;
     border: none;
@@ -90,7 +88,7 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background-color: darken($primary, 10%);
     }
   }
 }
