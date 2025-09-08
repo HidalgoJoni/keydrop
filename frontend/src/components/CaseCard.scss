@@ -1,0 +1,60 @@
+@import '../styles/variables';
+
+.case-card {
+  background-color: $surface-color;
+  border-radius: $border-radius;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  }
+
+  &__image-container {
+    background-color: darken($surface-color, 5%);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  &__image {
+    max-width: 100%;
+    height: auto;
+    max-height: 120px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  }
+
+  &__info {
+    padding: 1rem;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: $border-radius;
+    background-color: $primary-color;
+    color: $text-color-dark;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}

@@ -1,0 +1,70 @@
+@import '../styles/variables';
+
+.main-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: $surface-color;
+  border-bottom: 1px solid $surface-color-light;
+
+  .header-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $primary-color;
+    margin-right: 2rem;
+  }
+
+  .header-nav {
+    display: flex;
+    gap: 1.5rem;
+    a {
+      color: $text-color;
+      font-weight: 600;
+      transition: color 0.2s;
+      &.active, &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .header-user {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .user-balance {
+    background-color: $background-color;
+    padding: 0.5rem 1rem;
+    border-radius: $border-radius;
+    font-weight: bold;
+    color: $primary-color;
+  }
+}
+
+// Estilos de botones genéricos que puedes mover a un _buttons.scss
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: $border-radius;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &--primary {
+    background-color: $primary-color;
+    color: $text-color-dark;
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  &--secondary {
+    background-color: $surface-color-light;
+    color: $text-color;
+    &:hover {
+      background-color: lighten($surface-color-light, 10%);
+    }
+  }
+}
