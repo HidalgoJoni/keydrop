@@ -7,6 +7,11 @@ const Header = ({ onOpenLogin }) => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const handleLoginClick = () => {
+    if (typeof onOpenLogin === 'function') return onOpenLogin();
+    navigate('/login');
+  };
+
   return (
     <header className="app-header">
       <div className="container">
@@ -26,7 +31,8 @@ const Header = ({ onOpenLogin }) => {
               <button onClick={() => { logout(); navigate('/'); }} className="btn">Logout</button>
             </>
           ) : (
-            <button onClick={onOpenLogin} className="btn">Login / Register</button>
+            // use Link to guarantee navigation
+            <Link to="/login" className="btn">Login / Register</Link>
           )}
         </div>
       </div>

@@ -15,9 +15,20 @@ const { setupBattleSocket } = require('./src/sockets/battleSocket');
 app.use(cors());
 app.use(express.json());
 
-// basic rate limiter
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200 });
-app.use(limiter);
+// basic rate limiter (configurable)
+const RATE_LIMIT_MAX = process.env.RATE_LIMIT_MAX ? parseInt(process.env.RATE_LIMIT_MAX, 10) : 200;
+// Set RATE_LIMIT_ENABLED=false to disable rate limiting (useful for local dev/testing)
+const RATE_LIMIT_ENABLED = process.env.RATE_LIMIT_ENABLED !== 'false';
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: RATE_LIMIT_MAX });
+
+// Log effective rate limit settings at startup for debugging
+console.log(`RATE_LIMIT_ENABLED=${RATE_LIMIT_ENABLED}, RATE_LIMIT_MAX=${RATE_LIMIT_MAX}`);
+
+if (RATE_LIMIT_ENABLED) {
+	app.use(limiter);
+} else {
+	console.log(`Rate limiter disabled (NODE_ENV=${process.env.NODE_ENV || 'development'}). Set RATE_LIMIT_ENABLED=true or set RATE_LIMIT_MAX to enable.`);
+}
 
 // connect db
 connectDB();

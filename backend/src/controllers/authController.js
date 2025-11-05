@@ -4,46 +4,66 @@ const generateToken = require('../utils/generateToken');
 
 // @desc    Registrar un nuevo usuario
 // @route   POST /api/auth/register
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
-    if (!username || !email || !password) return res.status(400).json({ message: 'Faltan campos' });
 
-    const existing = await User.findOne({ email });
-    if (existing) return res.status(400).json({ message: 'El correo ya está en uso' });
+    // Validar entrada
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: 'Se requiere nombre de usuario, correo electrónico y contraseña' });
+    }
 
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
+    // Verificar si el usuario ya existe
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'El correo electrónico ya está en uso' });
+    }
 
-    const user = new User({ username, email, password: hash, balance: 0, inventory: [], history: [] });
+    // Hashear la contraseña
+    const passwordHash = await bcrypt.hash(String(password), 10);
+
+    const user = new User({ username, email, passwordHash, balance: 0, inventory: [], history: [] });
     await user.save();
 
     const token = generateToken(user._id);
     res.json({ token, user: { id: user._id, username: user.username, email: user.email, balance: user.balance } });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error del servidor' });
+    next(err);
   }
 };
 
 // @desc    Autenticar un usuario y obtener token
 // @route   POST /api/auth/login
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ message: 'Faltan campos' });
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: 'Credenciales inválidas' });
+    // Validar entrada
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Se requiere correo electrónico y contraseña' });
+    }
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ message: 'Credenciales inválidas' });
+    // Buscar usuario e incluir contraseña
+    const user = await User.findOne({ email }).select('+password');
+
+    // Asegurarse de que el usuario y el hash de la contraseña existan
+    if (!user || !user.password) {
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
+
+    // Asegurarse de que ambos argumentos para bcrypt.compare sean cadenas
+    const storedHash = typeof user.password === 'string' ? user.password : String(user.password);
+    const candidate = typeof password === 'string' ? password : String(password);
+
+    const match = await bcrypt.compare(candidate, storedHash);
+    if (!match) {
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
 
     const token = generateToken(user._id);
     res.json({ token, user: { id: user._id, username: user.username, email: user.email, balance: user.balance } });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error del servidor' });
+    next(err);
   }
 };
 
